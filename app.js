@@ -1,6 +1,6 @@
 const newTaskInput = document.getElementById('new-task');
 const addButton = document.getElementById('add-task');
-const incompleteTaskHolder = document.getElementById('incompleteTasks');
+const incompleteTaskHolder = document.getElementById('incomplete-tasks');
 const completedTasksHolder = document.getElementById('completed-tasks');
 
 function createTaskControls(taskString) {
@@ -23,7 +23,7 @@ function createTaskControls(taskString) {
   deleteButton.className = 'delete';
   const deleteButtonImg = document.createElement('img');
   deleteButtonImg.src = './remove.svg';
-  deleteButtonImg.alt = 'Delete'; // ← заодно accessibility-фикс
+  deleteButtonImg.alt = 'Delete';
   deleteButton.appendChild(deleteButtonImg);
   return { checkBox, label, editInput, editButton, deleteButton };
 }
@@ -100,10 +100,11 @@ const bindTaskEvents = function (taskListItem, checkboxChangeHandler) {
   checkBox.onchange = checkboxChangeHandler;
 };
 
-for (let i = 0; i < incompleteTaskHolder.children.length; i++) {
-  bindTaskEvents(incompleteTaskHolder.children[i], taskCompleted);
+function bindTasksInList(holder, handler) {
+  for (let i = 0; i < holder.children.length; i++) {
+    bindTaskEvents(holder.children[i], handler);
+  }
 }
 
-for (let i = 0; i < completedTasksHolder.children.length; i++) {
-  bindTaskEvents(completedTasksHolder.children[i], taskIncomplete);
-}
+bindTasksInList(incompleteTaskHolder, taskCompleted);
+bindTasksInList(completedTasksHolder, taskIncomplete);
