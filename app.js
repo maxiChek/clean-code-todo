@@ -3,29 +3,29 @@ const addButton = document.getElementById('add-task');
 const incompleteTaskHolder = document.getElementById('incomplete-tasks');
 const completedTasksHolder = document.getElementById('completed-tasks');
 
+function createElement(tag, props = {}) {
+  return Object.assign(document.createElement(tag), props);
+}
+
+function createDeleteButton() {
+  const button = createElement('button', { className: 'delete' });
+  button.appendChild(
+    createElement('img', { src: './remove.svg', alt: 'Delete' })
+  );
+  return button;
+}
+
 function createTaskControls(taskString) {
-  const checkBox = Object.assign(document.createElement('input'), {
-    type: 'checkbox'
-  });
-  const label = Object.assign(document.createElement('label'), {
-    className: 'task',
-    innerText: taskString
-  });
-  const editInput = Object.assign(document.createElement('input'), {
-    type: 'text',
-    className: 'task'
-  });
-  const editButton = Object.assign(document.createElement('button'), {
-    className: 'edit',
-    innerText: 'Edit'
-  });
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'delete';
-  const deleteButtonImg = document.createElement('img');
-  deleteButtonImg.src = './remove.svg';
-  deleteButtonImg.alt = 'Delete';
-  deleteButton.appendChild(deleteButtonImg);
-  return { checkBox, label, editInput, editButton, deleteButton };
+  return {
+    checkBox: createElement('input', { type: 'checkbox' }),
+    label: createElement('label', { className: 'task', innerText: taskString }),
+    editInput: createElement('input', { type: 'text', className: 'task' }),
+    editButton: createElement('button', {
+      className: 'edit',
+      innerText: 'Edit'
+    }),
+    deleteButton: createDeleteButton()
+  };
 }
 
 function createNewTaskElement(taskString) {
@@ -80,13 +80,20 @@ function moveTask(listItem, targetList, nextHandler) {
   bindTaskEvents(listItem, nextHandler);
 }
 
-const taskCompleted = function () {
-  moveTask(this.closest('li'), completedTasksHolder, taskIncomplete);
+const taskTransitions = {
+  completed: { targetList: completedTasksHolder, nextStatus: 'incomplete' },
+  incomplete: { targetList: incompleteTaskHolder, nextStatus: 'completed' }
 };
 
-const taskIncomplete = function () {
-  moveTask(this.closest('li'), incompleteTaskHolder, taskCompleted);
-};
+function createTransitionHandler(status) {
+  const { targetList, nextStatus } = taskTransitions[status];
+  return function () {
+    moveTask(this.parentNode, targetList, createTransitionHandler(nextStatus));
+  };
+}
+
+const taskCompleted = createTransitionHandler('completed');
+const taskIncomplete = createTransitionHandler('incomplete');
 
 addButton.addEventListener('click', addTask);
 
