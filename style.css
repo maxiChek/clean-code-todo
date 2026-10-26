@@ -35,8 +35,8 @@ body {
     display: flex;
 }
 ul {
-    margin:0;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 li, h3 {
     list-style:none;
@@ -46,7 +46,7 @@ input,button{
 }
 button {
     background: none;
-    border: 0px;
+    border: 0;
     color: #888;
     font-size: 15px;
     width: 60px;
@@ -73,7 +73,7 @@ input[type="text"] {
     line-height: 18px;
     height: 21px;
     padding: 0 9px;
-    border: 1px solid #dDd;
+    border: 1px solid #ddd;
     background: #FFF;
     border-radius: 6px;
     font-family: Lato, sans-serif;
@@ -115,7 +115,7 @@ li > label {
     font-size: 18px;
     width: 226px;
 }
-li >    input[type="text"] {
+li > input[type="text"] {
     width: 226px
 }
 button.delete img {
@@ -129,7 +129,7 @@ button.delete img:hover {
 
 /* Completed */
 ul#completed-tasks label {
-    text-decoration: line-through
+    text-decoration: line-through;
     color: #888;
 }
 
@@ -144,5 +144,5 @@ ul li.editMode input[type=text] {
 }
 
 ul li.editMode label {
-    display:none;
+    display: none;
 }
