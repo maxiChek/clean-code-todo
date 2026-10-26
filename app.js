@@ -3,38 +3,43 @@ const addButton = document.getElementsByTagName('button')[0];
 const incompleteTaskHolder = document.getElementById('incompleteTasks');
 const completedTasksHolder = document.getElementById('completed-tasks');
 
-const createNewTaskElement = function (taskString) {
-  const listItem = document.createElement('li');
-
-  const checkBox = document.createElement('input');
-  const label = document.createElement('label');
-  const editInput = document.createElement('input');
-  const editButton = document.createElement('button');
-
+function createTaskControls(taskString) {
+  const checkBox = Object.assign(document.createElement('input'), {
+    type: 'checkbox'
+  });
+  const label = Object.assign(document.createElement('label'), {
+    className: 'task',
+    innerText: taskString
+  });
+  const editInput = Object.assign(document.createElement('input'), {
+    type: 'text',
+    className: 'task'
+  });
+  const editButton = Object.assign(document.createElement('button'), {
+    className: 'edit',
+    innerText: 'Edit'
+  });
   const deleteButton = document.createElement('button');
-  const deleteButtonImg = document.createElement('img');
-
-  label.innerText = taskString;
-  label.className = 'task';
-
-  checkBox.type = 'checkbox';
-  editInput.type = 'text';
-  editInput.className = 'task';
-
-  editButton.innerText = 'Edit'; // innerText treats the label as text, not HTML
-  editButton.className = 'edit';
-
   deleteButton.className = 'delete';
+  const deleteButtonImg = document.createElement('img');
   deleteButtonImg.src = './remove.svg';
+  deleteButtonImg.alt = 'Delete'; // ← заодно accessibility-фикс
   deleteButton.appendChild(deleteButtonImg);
+  return { checkBox, label, editInput, editButton, deleteButton };
+}
 
-  listItem.appendChild(checkBox);
-  listItem.appendChild(label);
-  listItem.appendChild(editInput);
-  listItem.appendChild(editButton);
-  listItem.appendChild(deleteButton);
+function createNewTaskElement(taskString) {
+  const listItem = document.createElement('li');
+  const c = createTaskControls(taskString);
+  listItem.append(
+    c.checkBox,
+    c.label,
+    c.editInput,
+    c.editButton,
+    c.deleteButton
+  );
   return listItem;
-};
+}
 
 const addTask = function () {
   if (!newTaskInput.value) return;
