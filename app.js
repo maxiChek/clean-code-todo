@@ -1,5 +1,5 @@
 const newTaskInput = document.getElementById('new-task');
-const addButton = document.getElementsByTagName('button')[0];
+const addButton = document.getElementById('add-task');
 const incompleteTaskHolder = document.getElementById('incompleteTasks');
 const completedTasksHolder = document.getElementById('completed-tasks');
 
@@ -30,13 +30,13 @@ function createTaskControls(taskString) {
 
 function createNewTaskElement(taskString) {
   const listItem = document.createElement('li');
-  const c = createTaskControls(taskString);
+  const controls = createTaskControls(taskString);
   listItem.append(
-    c.checkBox,
-    c.label,
-    c.editInput,
-    c.editButton,
-    c.deleteButton
+    controls.checkBox,
+    controls.label,
+    controls.editInput,
+    controls.editButton,
+    controls.deleteButton
   );
   return listItem;
 }
@@ -52,7 +52,7 @@ const addTask = function () {
 };
 
 const editTask = function () {
-  const listItem = this.parentNode;
+  const listItem = this.closest('li');
 
   const editInput = listItem.querySelector('input[type=text]');
   const label = listItem.querySelector('label');
@@ -70,7 +70,7 @@ const editTask = function () {
 };
 
 const deleteTask = function () {
-  const listItem = this.parentNode;
+  const listItem = this.closest('li');
   const ul = listItem.parentNode;
   ul.removeChild(listItem);
 };
@@ -81,11 +81,11 @@ function moveTask(listItem, targetList, nextHandler) {
 }
 
 const taskCompleted = function () {
-  moveTask(this.parentNode, completedTasksHolder, taskIncomplete);
+  moveTask(this.closest('li'), completedTasksHolder, taskIncomplete);
 };
 
 const taskIncomplete = function () {
-  moveTask(this.parentNode, incompleteTaskHolder, taskCompleted);
+  moveTask(this.closest('li'), incompleteTaskHolder, taskCompleted);
 };
 
 addButton.addEventListener('click', addTask);
